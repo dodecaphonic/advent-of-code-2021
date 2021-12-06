@@ -1,10 +1,11 @@
 module AdventOfCode.Day2 where
 
-import           Control.Applicative  (many, (<|>))
+import           AdventOfCode.Inputs  (Parser)
+import qualified AdventOfCode.Inputs  as Inputs
+import           Control.Applicative  ((<|>))
 import           Data.Either          (fromRight)
 import           Data.List            (foldl')
-import           Data.Void            (Void)
-import           Text.Megaparsec      (Parsec, runParser)
+import           Text.Megaparsec      (runParser)
 import           Text.Megaparsec.Char
 
 data Command
@@ -13,30 +14,11 @@ data Command
   | Up Int
   deriving (Show, Eq)
 
-type Parser = Parsec Void String
-
-digit :: Parser Int
-digit = do
-  dc <- digitChar
-
-  case dc of
-    '0' -> pure 0
-    '1' -> pure 1
-    '2' -> pure 2
-    '3' -> pure 3
-    '4' -> pure 4
-    '5' -> pure 5
-    '6' -> pure 6
-    '7' -> pure 7
-    '8' -> pure 8
-    '9' -> pure 9
-    _   -> error "Not a digit"
-
 parseCommand :: Parser Command
 parseCommand = do
   command <- (Up <$ string "up") <|> (Down <$ string "down") <|> (Forward <$ string "forward")
   space
-  count <- read <$> many digitChar
+  count <- Inputs.int
 
   pure (command count)
 

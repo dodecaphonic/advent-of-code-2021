@@ -1,9 +1,8 @@
 module AdventOfCode.Inputs where
 
 import           Control.Applicative  (many)
-import           Control.Lens         (folded, imap, sumOf, (^..))
+import           Control.Lens         (folded, imap, sumOf)
 import           Data.Char            (digitToInt)
-import           Data.List            (foldl')
 import           Data.Void            (Void)
 import           Text.Megaparsec      (Parsec)
 import           Text.Megaparsec.Char (digitChar)

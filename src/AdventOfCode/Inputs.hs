@@ -1,6 +1,6 @@
 module AdventOfCode.Inputs where
 
-import           Control.Applicative  (many)
+import           Control.Applicative  (some)
 import           Control.Lens         (folded, imap, sumOf)
 import           Data.Char            (digitToInt)
 import           Data.Void            (Void)
@@ -14,7 +14,7 @@ digit = digitToInt <$> digitChar
 
 int :: Parser Int
 int = do
-  digits <- many digit
+  digits <- some digit
 
   pure . sumOf folded . imap (\i n -> 10 ^ i * n) $ reverse digits
 
@@ -23,6 +23,9 @@ loadInts = fmap (fmap read) . loadStrings
 
 loadStrings :: FilePath -> IO [String]
 loadStrings path = lines <$> readFile path
+
+loadFile :: FilePath -> IO String
+loadFile = readFile
 
 solve :: (FilePath -> IO [a]) -> ([a] -> b) -> FilePath -> IO b
 solve load fn path = fn <$> load path

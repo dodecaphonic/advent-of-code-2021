@@ -8,7 +8,7 @@ import           Control.Applicative  (many)
 import           Control.Lens
 import           Data.Char            (digitToInt)
 import           Data.Either          (fromRight)
-import           Data.List            (group, sort)
+import           Data.List            (group, sort, transpose)
 import           Data.Vector          ((!))
 import qualified Data.Vector          as V
 import           Text.Megaparsec      (runParser)
@@ -28,25 +28,7 @@ testInputs =
     "11001",
     "00010",
     "01010"
-    -- 0: (5, 7)
-    -- 1: (7, 5)
-    -- 2: (4, 8)
-    -- 3: (5, 7)
-    -- 4: (7, 5)
   ]
-
-transpose :: [[a]] -> [[a]]
-transpose [] = []
-transpose ([] : xss) = transpose xss
-transpose ((x : xs) : xss) = combine x hds xs tls
-  where
-    -- We tie the calculations of heads and tails together
-    -- to prevent heads from leaking into tails and vice versa.
-    -- unzip makes the selector thunk arrangements we need to
-    -- ensure everything gets cleaned up properly.
-    (hds, tls) = unzip [(hd, tl) | hd : tl <- xss]
-    combine y h ys t = (y : h) : transpose (ys : t)
-    {-# NOINLINE combine #-}
 
 toDecimal :: [Int] -> Int
 toDecimal = sum . imap (\i n -> 2 ^ i * n) . reverse

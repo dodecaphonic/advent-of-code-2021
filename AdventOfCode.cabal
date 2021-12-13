@@ -40,12 +40,14 @@ library
                        , AdventOfCode.Day1
                        , AdventOfCode.Day2
                        , AdventOfCode.Day3
+                       , AdventOfCode.Day4
     -- other-extensions:
     build-depends:       base ^>=4.14.3.0
                        , containers
                        , megaparsec
                        , lens
                        , vector
+                       , text
     hs-source-dirs:      src
     default-language:    Haskell2010
     ghc-options: -Wall

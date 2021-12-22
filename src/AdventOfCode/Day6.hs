@@ -1,15 +1,9 @@
 module AdventOfCode.Day6 where
 
-import           AdventOfCode.Inputs  (Parser)
-import qualified AdventOfCode.Inputs  as Inputs
-import           Data.List            (foldl', group, sort)
-import           Data.Vector          (Vector, (!), (//))
-import qualified Data.Vector          as Vector
-import           Text.Megaparsec      (runParser, sepBy)
-import           Text.Megaparsec.Char (char)
-
-day0 :: Parser [Int]
-day0 = Inputs.int `sepBy` char ','
+import qualified AdventOfCode.Inputs as Inputs
+import           Data.List           (foldl', group, sort)
+import           Data.Vector         (Vector, (!), (//))
+import qualified Data.Vector         as Vector
 
 initialState :: [Int] -> Vector Int
 initialState = (zeroed //) . map (\g@(x : _) -> (x, length g)) . group . sort
@@ -27,13 +21,8 @@ nextDay state = foldl' updateState state (reverse [0 .. 8])
 simulateDay :: Int -> Vector Int -> Vector Int
 simulateDay n state = foldl' (\state' _ -> nextDay state') state [1 .. n]
 
-parseInputs :: String -> Vector Int
-parseInputs str = case runParser day0 "" str of
-  Left _      -> error "Could not parse str"
-  Right value -> initialState value
-
 part1 :: String -> Int
-part1 = sum . simulateDay 80 . parseInputs
+part1 = sum . simulateDay 80 . Vector.fromList . Inputs.parseInts
 
 part2 :: String -> Int
-part2 = sum . simulateDay 256 . parseInputs
+part2 = sum . simulateDay 256 . Vector.fromList . Inputs.parseInts

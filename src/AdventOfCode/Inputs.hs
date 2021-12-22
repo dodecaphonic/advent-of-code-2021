@@ -4,8 +4,8 @@ import           Control.Applicative  (some)
 import           Control.Lens         (folded, imap, sumOf)
 import           Data.Char            (digitToInt)
 import           Data.Void            (Void)
-import           Text.Megaparsec      (Parsec)
-import           Text.Megaparsec.Char (digitChar)
+import           Text.Megaparsec      (Parsec, runParser, sepBy)
+import           Text.Megaparsec.Char (char, digitChar)
 
 type Parser = Parsec Void String
 
@@ -17,6 +17,14 @@ int = do
   digits <- some digit
 
   pure . sumOf folded . imap (\i n -> 10 ^ i * n) $ reverse digits
+
+intList :: Parser [Int]
+intList = int `sepBy` char ','
+
+parseInts :: String -> [Int]
+parseInts str = case runParser intList "" str of
+  Left _      -> error "Could not parse str"
+  Right value -> value
 
 loadInts :: FilePath -> IO [Int]
 loadInts = fmap (fmap read) . loadStrings
